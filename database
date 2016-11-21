@@ -1,0 +1,702 @@
+package moradi.ramin;
+
+import java.util.ArrayList;
+import java.util.List;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+
+public class DatabaseManager extends SQLiteOpenHelper {
+
+    public DatabaseManager(Context context)
+    {
+        super(context, "hesabdariDB", null, 1);
+    }
+
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        // TODO Auto-generated method stub
+        // ساخت جدول tbl_hesab
+
+        /************************************************************* ساخت جدول حساب *****/
+        String query = "CREATE TABLE tbl_Hesab ( "
+                + " ID        INTEGER        PRIMARY KEY AUTOINCREMENT"
+                + "  NOT NULL"
+                + "   UNIQUE,"
+                + "  NameHesab VARCHAR( 50 ),"
+                + "  Mojodi    NUMERIC "
+                + "  );";
+
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_hesab (NameHesab,Mojodi) VALUES('کیف پول',0)";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_hesab (NameHesab,Mojodi) VALUES('بانک ملی',0)";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_hesab (NameHesab,Mojodi) VALUES('بانک صادرات',0)";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_hesab (NameHesab,Mojodi) VALUES('بانک ملت',0)";
+        db.execSQL(query);
+
+        /************************************************************* ساخت جدول دسته های اصلی *****/
+
+        query = "CREATE TABLE tbl_DastebandiAsli ( "
+                + "   ID             INTEGER        PRIMARY KEY AUTOINCREMENT"
+                + "  NOT NULL"
+                + "  UNIQUE,"
+                + " NameDastebandi VARCHAR( 50 ),"
+                + "  Kind           CHAR "
+                + " );";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiAsli (NameDastebandi,Kind) VALUES ('حقوق','D')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiAsli (NameDastebandi,Kind) VALUES ('فروش','D')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiAsli (NameDastebandi,Kind) VALUES ('اجاره','D')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiAsli (NameDastebandi,Kind) VALUES ('يارانه','D')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiAsli (NameDastebandi,Kind) VALUES ('بدهکاران به من','D')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiAsli (NameDastebandi,Kind) VALUES ('اتومبيل','H')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiAsli (NameDastebandi,Kind) VALUES ('اجاره','H')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiAsli (NameDastebandi,Kind) VALUES ('رفت و آمد','H')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiAsli (NameDastebandi,Kind) VALUES ('غذا','H')";
+        db.execSQL(query);
+
+        /********************************************************************** ساخت جدول دسته های فرعی ********/
+        query = "CREATE TABLE tbl_DastebandiFari ( "
+                + "  ID                INTEGER        PRIMARY KEY AUTOINCREMENT"
+                + " NOT NULL"
+                + "   UNIQUE,"
+                + "     NameDastebandi    VARCHAR( 50 ),"
+                + " ID_DastebandiAsli INTEGER        REFERENCES tbl_DastebandiAsli ( ID ) "
+                + " );  ";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('عمومي','1')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('عيدي','1')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('پاداش','1')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('محصول 1','2')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('محصول 2','2')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('محصول 3','2')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('خانه','3')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('شرکت','3')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('مغازه','3')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('یارانه','4')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('بدهکاران به من','5')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('تعمیرگاه','6')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('بنزین','6')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('بیمه','6')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('جریمه','6')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('خانه','7')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('شرکت','7')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('مغازه','7')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('اتوبوس','8')";
+        db.execSQL(query);
+
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('مترو','8')";
+        db.execSQL(query);
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('تاکسی','8')";
+        db.execSQL(query);
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('آژانس','8')";
+        db.execSQL(query);
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('پارکینگ','8')";
+        db.execSQL(query);
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('رستوران','9')";
+        db.execSQL(query);
+        query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,ID_DastebandiAsli) VALUES ('کافی شاپ','9')";
+        db.execSQL(query);
+
+        /**************************************************** sakhte view_dastebandiha *************/
+        query = " CREATE VIEW view_dastebandiha AS "
+                + " SELECT tbl_dastebandiAsli.id, "
+                + " tbl_dastebandiAsli.namedastebandi,"
+                + " tbl_dastebandiAsli.kind,"
+                + " tbl_dastebandifari.Id AS IDfari,"
+                + " tbl_dastebandifari.namedastebandi AS namedastebandifari"
+                + " FROM tbl_dastebandiAsli"
+                + " INNER JOIN tbl_dastebandifari"
+                + " WHERE tbl_dastebandiasli.id = tbl_dastebandifari.id_dastebandiasli;";
+        db.execSQL(query);
+
+        /************************************************* sakhte tbl_HazineDaramad **************/
+        query = "CREATE TABLE tbl_HazineDaramad ( "
+                + " ID               INTEGER         PRIMARY KEY AUTOINCREMENT"
+                + " NOT NULL"
+                + " UNIQUE,"
+                + " Mablagh          NUMERIC,"
+                + " IDDastebandiFari INTEGER         REFERENCES tbl_DastebandiFari ( ID ) ON DELETE CASCADE,"
+                + " IDHesab          INTEGER         REFERENCES tbl_Hesab ( ID ) ON DELETE CASCADE,"
+                + " Tarikh           VARCHAR,"
+                + " Tozih            VARCHAR( 500 ) "
+                + " );";
+
+        db.execSQL(query);
+
+        /************************************************ sakhte view_hazine_daramad ***********/
+
+        query = " CREATE VIEW view_hazine_daramad AS "
+                + " SELECT * "
+                + " FROM tbl_hazinedaramad"
+                + "  INNER JOIN view_dastebandiha"
+                + "  WHERE tbl_hazinedaramad.iddastebandifari = view_dastebandiha.idfari;";
+        db.execSQL(query);
+
+    }
+
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
+        // TODO Auto-generated method stub
+
+        db.execSQL("DROP TABLE IF EXISTS tbl_Hesab ");
+
+        db.execSQL("DROP TABLE IF EXISTS tbl_DastebandiAsli ");
+
+        db.execSQL("DROP TABLE IF EXISTS tbl_HazineDaramad ");
+
+        onCreate(db);
+    }
+
+
+    /************************************************************************* متدهای مربوط به حساب *******/
+    public List<Hesab> getHesab()
+    {
+        List<Hesab> list_hesabha = new ArrayList<Hesab>();
+
+        String query = "SELECT ID,NameHesab,Mojodi FROM tbl_hesab";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        while (cursor.moveToNext() == true)
+        {
+            Hesab h = new Hesab();
+            h.id = cursor.getInt(0);
+            h.nameHesab = cursor.getString(1);
+            h.mojodi = cursor.getDouble(2);
+
+            list_hesabha.add(h);
+        }
+
+        return list_hesabha;
+
+    }
+
+
+    public Boolean HesabJadid(String NameHesab, Double mojodi)
+    {
+        Boolean result;
+
+        String query = "INSERT INTO tbl_Hesab (NameHesab,Mojodi) " +
+                "VALUES ('" + NameHesab + "'," + mojodi + ")";
+
+        try
+        {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL(query);
+
+            db.close();
+
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+
+    }
+
+
+    public Boolean deleteHesab(int id)
+    {
+        Boolean result;
+
+        String query = "DELETE FROM tbl_Hesab WHERE id = " + id;
+
+        try
+        {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL(query);
+            db.close();
+
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    public Boolean updateHesab(String NameHesab, Integer id_hesab)
+    {
+        Boolean result;
+
+        String query = "UPDATE tbl_hesab " +
+                " SET nameHesab = '" + NameHesab + "'" +
+                " WHERE id = " + id_hesab;
+
+        try
+        {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL(query);
+
+            db.close();
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    /************************************************************** متدهای مربوط به دسته بندی اصلی و فرعی *******/
+
+    public List<Dastebandi> getDastebandiAsli(String kind)
+    {
+
+        List<Dastebandi> dastehaye_asli = new ArrayList<Dastebandi>();
+
+        String query = "SELECT id,NameDastebandi FROM tbl_DastebandiAsli WHERE kind = '" + kind + "'";
+
+        try
+        {
+            SQLiteDatabase db = this.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+
+            while (cursor.moveToNext() == true)
+            {
+                Dastebandi d = new Dastebandi();
+                d.id = cursor.getInt(0);
+                d.Onvan = cursor.getString(1);
+
+                dastehaye_asli.add(d);
+            }
+        }
+        catch (Exception ex)
+        {
+            String msg = ex.getMessage();
+        }
+        return dastehaye_asli;
+    }
+
+
+    public List<Dastebandi> getDastebandiFari(String id_daste_asli)
+    {
+
+        List<Dastebandi> dastehaye_fari = new ArrayList<Dastebandi>();
+
+        String query = "SELECT id,NameDastebandi FROM tbl_DastebandiFari WHERE id_dastebandiAsli = '" + id_daste_asli + "'";
+
+        try
+        {
+            SQLiteDatabase db = this.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+
+            while (cursor.moveToNext() == true)
+            {
+                Dastebandi d = new Dastebandi();
+                d.id = cursor.getInt(0);
+                d.Onvan = cursor.getString(1);
+
+                dastehaye_fari.add(d);
+            }
+        }
+        catch (Exception ex)
+        {
+            String msg = ex.getMessage();
+        }
+        return dastehaye_fari;
+    }
+
+
+    public boolean DasteAsliJadid(String nameDastebandi, String kind)
+    {
+        boolean result;
+
+        try
+        {
+            String query = "INSERT INTO tbl_DastebandiAsli (NameDastebandi,Kind) " +
+                    "VALUES ( '" + nameDastebandi + "', '" + kind + "')";
+
+            // ایجاد ارتباط نوشتنی با دیتابیس
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.execSQL(query);
+
+            db.close();
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    public boolean deleteDasteAsli(int id)
+    {
+        boolean result;
+
+        try
+        {
+            String query = "DELETE FROM tbl_dastebandiAsli WHERE id = " + id;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.execSQL(query);
+
+            db.close();
+
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    public boolean updateDasteAsli(String nameDastebandi, Integer id)
+
+    {
+        boolean result;
+
+        try
+        {
+            String query =
+                    "UPDATE tbl_dastebandiAsli " +
+                            " SET nameDastebandi='" + nameDastebandi + "'" +
+                            " WHERE id = " + id;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.execSQL(query);
+
+            db.close();
+
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+
+    }
+
+
+    public boolean DasteFariJadid(String nameDastebandi, String id_dastebandiAsli)
+    {
+        boolean result;
+
+        try
+        {
+            String query = "INSERT INTO tbl_DastebandiFari (NameDastebandi,id_dastebandiAsli) " +
+                    "VALUES ( '" + nameDastebandi + "', '" + id_dastebandiAsli + "')";
+
+            // ایجاد ارتباط نوشتنی با دیتابیس
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.execSQL(query);
+
+            db.close();
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    public boolean deleteDasteFari(int id)
+    {
+        boolean result;
+
+        try
+        {
+            String query = "DELETE FROM tbl_dastebandiFari WHERE id = " + id;
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.execSQL(query);
+
+            db.close();
+
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    public boolean updateDasteFari(String nameDastebandi, String id)
+    {
+        boolean result;
+
+        try
+        {
+            String query =
+                    "UPDATE tbl_dastebandiFari " +
+                            " SET nameDastebandi='" + nameDastebandi + "'" +
+                            " WHERE id = " + id;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.execSQL(query);
+
+            db.close();
+
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    /***************************************************************************/
+    public String NameDasteAsliFari(String id_fari)
+    {
+        String result = "";
+
+        try
+        {
+
+            String query = "SELECT nameDastebandi,nameDastebandiFari FROM view_dastebandiha WHERE IDfari = " + id_fari;
+
+            SQLiteDatabase db = this.getReadableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst() == true)
+            {
+                result = cursor.getString(0) + " : " + cursor.getString(1);
+            }
+        }
+        catch (Exception ex)
+        {
+            String msg = ex.getMessage();
+        }
+
+        return result;
+    }
+
+
+    public Boolean DaramadHazineJadid(String mablagh, String ID_Fari, String ID_Hesab, String tarikh, String Tozih)
+    {
+        Boolean result;
+
+        String query = " INSERT INTO tbl_HazineDaramad(Mablagh,IDDastebandiFari,IDHesab,Tarikh,Tozih) "
+                + " VALUES('" + mablagh + "'," + ID_Fari + "," + ID_Hesab + ",'" + tarikh + "','" + Tozih + "')";
+
+        try
+        {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL(query);
+
+            db.close();
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+
+    }
+
+
+    public Boolean UpdateMojodiHesab(String Mojodi, String id_hesab)
+    {
+        Boolean result;
+
+        try
+        {
+            String query = "UPDATE tbl_Hesab SET mojodi = mojodi + " + Mojodi + " WHERE id = " + id_hesab;
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            db.execSQL(query);
+            db.close();
+            result = true;
+        }
+        catch (Exception ex)
+        {
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    public List<HazineDaramad> getHazineDaramadbyTarikhAndKind(String azTarikh, String taTarikh, String Kind)
+    {
+        List<HazineDaramad> list_daramdHazine = new ArrayList<HazineDaramad>();
+
+        String query = "select sum(mablagh),namedastebandifari,tarikh from view_hazine_daramad where Kind='" + Kind + "' " +
+                " and tarikh between '" + azTarikh + "' and '" + taTarikh + "' group by idfari order by sum(mablagh) desc ";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        while (cursor.moveToNext() == true)
+        {
+            HazineDaramad hd = new HazineDaramad();
+            hd.JameKol = cursor.getDouble(0);
+            hd.nameDastebandi = cursor.getString(1);
+
+            hd.Tarikh = cursor.getString(2);
+            hd.mablagh = Double.toString(cursor.getDouble(0));
+
+            list_daramdHazine.add(hd);
+
+        }
+
+        return list_daramdHazine;
+    }
+
+
+    public Double getBardashti(String id_hesab, String azTarikh, String taTarikh)
+    {
+        Double result = 0d;
+
+        String query = "SELECT SUM(mablagh) FROM view_hazine_daramad WHERE IDhesab = " + id_hesab +
+                " and tarikh between '" + azTarikh + "'  and '" + taTarikh + "' and Kind = 'H'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst() == true)
+        {
+            result = cursor.getDouble(0);
+        }
+
+        return result;
+
+    }
+
+
+    public Double getVarizi(String id_hesab, String azTarikh, String taTarikh)
+    {
+        Double result = 0d;
+
+        String query = "SELECT SUM(mablagh) FROM view_hazine_daramad WHERE IDhesab = " + id_hesab +
+                " and tarikh between '" + azTarikh + "'  and '" + taTarikh + "' and Kind = 'D'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst() == true)
+        {
+            result = cursor.getDouble(0);
+        }
+
+        return result;
+
+    }
+
+
+    public Double getMojodi(String id_hesab)
+    {
+        Double result = 0d;
+
+        String query = "SELECT mojodi FROM tbl_hesab WHERE ID = " + id_hesab;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst() == true)
+        {
+            result = cursor.getDouble(0);
+        }
+
+        return result;
+
+    }
+
+}
